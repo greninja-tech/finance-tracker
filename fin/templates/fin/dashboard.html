@@ -1,0 +1,88 @@
+{% extends 'fin/base.html' %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h3 class="text-center mb-4">📋 Dashboard Overview</h3>
+
+    <!-- Summary Cards -->
+    <div class="row text-center mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="card shadow-sm border-start border-primary border-4">
+                <div class="card-body">
+                    <h6>Initial Salary</h6>
+                    <h5 class="text-primary">₹{{ user.income }}</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card shadow-sm border-start border-success border-4">
+                <div class="card-body">
+                    <h6>Total Salary Added</h6>
+                    <h5 class="text-success">₹{{ total_salary_added }}</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card shadow-sm border-start border-danger border-4">
+                <div class="card-body">
+                    <h6>Total Expenses</h6>
+                    <h5 class="text-danger">₹{{ total_expense }}</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card shadow-sm border-start border-warning border-4">
+                <div class="card-body">
+                    <h6>Available Balance</h6>
+                    <h5 class="text-warning">₹{{ available_balance }}</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="d-flex justify-content-center mb-4 gap-3">
+        <a href="{% url 'add_expense' %}" class="btn btn-success">➕ Add Expense</a>
+        <a href="{% url 'view_expense' %}" class="btn btn-primary">📄 View Transactions</a>
+        <a href="{% url 'analytics' %}" class="btn btn-warning text-white">📊 View Analytics</a>
+    </div>
+
+    <!-- Last 5 Transactions -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-secondary text-white">
+            <h5 class="mb-0">🕔 Last 5 Transactions</h5>
+        </div>
+        <div class="card-body table-responsive">
+            {% if last_transactions %}
+            <table class="table table-striped text-center">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Title</th>
+                        <th>Amount (₹)</th>
+                        <th>Category</th>
+                        <th>Type</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for txn in last_transactions %}
+                    <tr>
+                        <td>{{ txn.title }}</td>
+                        <td class="{% if txn.type == 'EXPENSE' %}text-danger{% else %}text-success{% endif %}">
+                            {% if txn.type == 'EXPENSE' %}-{% else %}+{% endif %}₹{{ txn.amount }}
+                        </td>
+                        <td>{{ txn.category }}</td>
+                        <td>{{ txn.type }}</td>
+                        <td>{{ txn.date }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+                <p class="text-muted text-center">No transactions yet.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

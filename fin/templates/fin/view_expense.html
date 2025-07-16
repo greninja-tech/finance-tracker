@@ -1,0 +1,47 @@
+{% extends 'fin/base.html' %}
+{% block title %}Your Expenses{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h3 class="mb-4 text-center">🧾 Transaction History</h3>
+
+    {% if expenses %}
+    <div class="text-center mt-4">
+    <a href="{% url 'download_pdf' %}" class="btn btn-outline-primary">
+        📄 Download PDF
+    </a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover shadow-sm">
+            <thead class="table-dark text-center">
+                <tr>
+                    <th>Title</th>
+                    <th>Amount (₹)</th>
+                    <th>Category</th>
+                    <th>Type</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for txn in expenses %}
+                <tr class="text-center align-middle">
+                    <td>{{ txn.title }}</td>
+                    <td class="{% if txn.type == 'EXPENSE' %}text-danger{% else %}text-success{% endif %} fw-bold">
+                        {% if txn.type == 'EXPENSE' %}-{% else %}+{% endif %}₹{{ txn.amount }}
+                    </td>
+                    <td>{{ txn.category }}</td>
+                    <td>{{ txn.type }}</td>
+                    <td>{{ txn.date }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <div class="alert alert-info text-center">
+            No transactions yet. <a href="{% url 'add_expense' %}">Add one now</a> 💸
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

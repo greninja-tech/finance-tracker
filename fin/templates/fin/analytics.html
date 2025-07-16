@@ -1,0 +1,98 @@
+{% extends 'fin/base.html' %}
+{% block title %}Analytics{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <h3 class="text-center mb-4">📊 Expense Analytics</h3>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8 col-sm-12 mb-4">
+            <div class="card shadow-sm p-4">
+                <h5 class="text-center mb-3">Expenses by Category</h5>
+                <canvas id="expensePieChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    {% if months %}
+    <div class="row justify-content-center mt-4">
+        <div class="col-lg-10 col-md-11 col-sm-12">
+            <div class="card shadow-sm p-4">
+                <h5 class="text-center mb-3">Monthly Income vs Expense</h5>
+                <canvas id="incomeExpenseLineChart"></canvas>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    // Pie Chart
+    const ctxPie = document.getElementById('expensePieChart');
+    new Chart(ctxPie, {
+        type: 'pie',
+        data: {
+            labels: {{ labels|safe }},
+            datasets: [{
+                label: 'Expenses',
+                data: {{ data|safe }},
+                backgroundColor: [
+                    '#007bff', '#dc3545', '#ffc107', '#28a745', '#6f42c1', '#fd7e14', '#20c997'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }
+    });
+
+    {% if months %}
+    const ctxLine = document.getElementById('incomeExpenseLineChart');
+    new Chart(ctxLine, {
+        type: 'line',
+        data: {
+            labels: {{ months|safe }},
+            datasets: [
+                {
+                    label: 'Income',
+                    data: {{ income|safe }},
+                    borderColor: 'green',
+                    backgroundColor: 'rgba(40, 167, 69, 0.2)',
+                    fill: true
+                },
+                {
+                    label: 'Expense',
+                    data: {{ expense|safe }},
+                    borderColor: 'red',
+                    backgroundColor: 'rgba(220, 53, 69, 0.2)',
+                    fill: true
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            tension: 0.4,
+            plugins: {
+                legend: {
+                    position: 'top'
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+    {% endif %}
+</script>
+{% endblock %}
