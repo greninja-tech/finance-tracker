@@ -24,7 +24,7 @@ Line chart comparing monthly income vs expenses
 
 🧾 Full transaction history in tabular format
 
-🖨️ PDF export of full transaction history (using WeasyPrint / ReportLab)
+🖨️ PDF export of full transaction history
 
 🌐 Responsive UI with Bootstrap 5
 
@@ -36,11 +36,11 @@ Line chart comparing monthly income vs expenses
 
 
 🛠️ Tech Stack
-Backend: Django, SQLite3
+Backend: Django, PostgreSQL
 
 Frontend: HTML, CSS, Bootstrap 5, Chart.js
 
-PDF Generation: WeasyPrint (or ReportLab)
+PDF Generation: ReportLab
 
 Session Management: Django sessions
 
